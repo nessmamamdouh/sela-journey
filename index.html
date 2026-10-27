@@ -123,6 +123,39 @@ h2{font-size:clamp(32px,4.4vw,56px);font-weight:600;letter-spacing:-.01em}
 .a .how{background:rgba(31,122,77,.12);color:var(--ok)}
 .face ul{margin:8px 0 0;padding-left:18px;color:var(--fg2);font-size:14px}
 .face li{margin-top:3px}
+/* side-by-side comparison */
+.cmp{margin-top:36px;display:grid;grid-template-columns:220px 1fr 44px 1fr;gap:12px 0;align-items:stretch}
+.cmp-head{display:contents}
+.cmp-head>div{padding:0 18px 10px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.cmp-head .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.cmp-hb{color:var(--warn)}.cmp-hb .dot{background:var(--warn)}
+.cmp-ha{color:var(--ok)}.cmp-ha .dot{background:var(--ok)}
+.cmp-row{display:contents}
+.cmp-row>div{transition:border-color .4s,box-shadow .4s,transform .4s,background .4s}
+.cmp-step{padding:18px 18px 18px 0;display:flex;flex-direction:column;justify-content:center;border-top:1px solid var(--line)}
+.cmp-step .n{font-family:var(--mono);font-size:12px;color:var(--fg3);letter-spacing:.12em}
+.cmp-step h3{font-size:18px;margin-top:6px;line-height:1.25}
+.cmp-b,.cmp-a{padding:18px 20px;border-radius:14px;min-width:0}
+.cmp-b{background:var(--bg);border:1px dashed var(--line);color:var(--fg2)}
+.cmp-b p{color:var(--fg3)}
+.cmp-a{background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--ok);box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.cmp-arrow{display:flex;align-items:center;justify-content:center;color:var(--fg3);font-size:22px}
+.cmp .how{display:inline-block;margin-bottom:8px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:4px}
+.cmp-b .how{background:rgba(168,115,26,.12);color:var(--warn)}
+.cmp-a .how{background:rgba(31,122,77,.12);color:var(--ok)}
+.cmp p{font-size:15px;line-height:1.5;margin:0}
+.cmp-row.lit .cmp-a{border-color:var(--ok);box-shadow:0 0 0 3px rgba(31,122,77,.14);transform:translateX(4px)}
+.cmp-row.lit .cmp-b{border-style:solid;border-color:var(--warn);background:rgba(168,115,26,.05)}
+.cmp-row.lit .cmp-arrow{color:var(--accent);transform:scale(1.25)}
+.cmp-row.lit .cmp-step h3{color:var(--accent)}
+@media (max-width:980px){
+  .cmp{grid-template-columns:1fr;gap:10px}
+  .cmp-head{display:none}
+  .cmp-row{display:grid;grid-template-columns:1fr;gap:8px;padding-top:14px;border-top:1px solid var(--line)}
+  .cmp-step{border-top:0;padding:0}
+  .cmp-arrow{height:14px;transform:rotate(90deg)}
+  .cmp-b .how::after{content:" · 2025"}.cmp-a .how::after{content:" · now"}
+}
 .ba-sum{margin-top:32px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .ba-sum .stat{position:relative;overflow:hidden}
 .ba-sum .stat .num{font-size:30px}
@@ -226,7 +259,7 @@ footer{padding:40px 0 60px;color:var(--fg3);font-size:13px;font-family:var(--mon
 @media (prefers-reduced-motion:reduce){
   .rv,.rv.pre{transition:none;opacity:1;transform:none}
   .pulse,.ticker-in{animation:none}
-  .tl-fill,.bar i,.track i,.role .rb i,.step,.step .face>div,.switch .pill{transition:none}
+  .tl-fill,.bar i,.track i,.role .rb i,.step,.step .face>div,.switch .pill,.cmp-row>div{transition:none}
 }
 </style>
 
@@ -333,45 +366,62 @@ footer{padding:40px 0 60px;color:var(--fg3);font-size:13px;font-family:var(--mon
 <section id="automation" class="ba"><div class="wrap">
   <p class="eyebrow rv">The big change</p>
   <h2 class="rv d1">The same monthly cycle, before and after Fisheye Ops</h2>
-  <p class="lead rv d2">The account started on email and Excel. In 2026 we built Fisheye Ops around Sela's own situations: late POs, multiple batches, renewals mid-month. Flip the switch.</p>
-  <div class="switch rv d3" id="baSwitch" role="group" aria-label="Before or after">
-    <div class="pill"></div>
-    <button type="button" id="btnBefore" aria-pressed="true">Manual · 2025</button>
-    <button type="button" id="btnAfter" aria-pressed="false">Fisheye Ops · now</button>
-  </div>
-  <div class="cycle rv d3" id="cycle">
-    <div class="step"><div class="n">STEP 1</div><h3>Who is on payroll this month</h3><div class="face">
-      <div class="b"><span class="how">manual</span><p>A sheet typed by hand from contracts, emails and WhatsApp. Joiners and leavers remembered, not detected.</p></div>
-      <div class="a"><span class="how">system</span><p>Built from the contract records: start, end, renewal, package. Every Sela contract appears automatically with its stage.</p></div>
-    </div></div>
-    <div class="step"><div class="n">STEP 2</div><h3>Days, deductions, GOSI</h3><div class="face">
-      <div class="b"><span class="how">manual</span><p>Proration worked out in Excel formulas per person; a mid-month start or exit meant a manual recalculation.</p></div>
-      <div class="a"><span class="how">system</span><p>30-day proration, deductions and GOSI computed per row. The net amount and "x / 30 days" shown on each line.</p></div>
-    </div></div>
-    <div class="step"><div class="n">STEP 3</div><h3>Match to the Sela PO</h3><div class="face">
-      <div class="b"><span class="how">manual</span><p>PO numbers searched in mailboxes and matched by hand; a person moving to a new PO needed a manual note.</p></div>
-      <div class="a"><span class="how">system</span><p>Each contract tied to its PO in the ledger. Missing PO, late PO and over-consumed PO are visible on the row.</p></div>
-    </div></div>
-    <div class="step"><div class="n">STEP 4</div><h3>Approval from Sela</h3><div class="face">
-      <div class="b"><span class="how">manual</span><p>PDF attached to an email, often held back by mail filters; approvals followed up by phone.</p></div>
-      <div class="a"><span class="how">system</span><p>Sela managers approve on a secure link with phone verification. No attachments, nothing to block.</p></div>
-    </div></div>
-    <div class="step"><div class="n">STEP 5</div><h3>Pay, in batches</h3><div class="face">
-      <div class="b"><span class="how">manual</span><p>One cycle. A PO that landed after payday meant waiting for next month's run, and the owed days were tracked by hand.</p></div>
-      <div class="a"><span class="how">system</span><p>Two to three batches a month. The moment a PO lands, the person is in the next batch with every owed day computed. Approved rows lock and leave the list.</p></div>
-    </div></div>
-    <div class="step"><div class="n">STEP 6</div><h3>Invoice per PO</h3><div class="face">
-      <div class="b"><span class="how">manual</span><p>Invoice typed in Zoho from the sheet; PO balance checked in a separate Excel.</p></div>
-      <div class="a"><span class="how">system</span><p>One invoice per PO per month, against the ledger's remaining balance. Credit notes attached in place.</p></div>
-    </div></div>
-    <div class="step"><div class="n">STEP 7</div><h3>Payments and SOA</h3><div class="face">
-      <div class="b"><span class="how">manual</span><p>Bank credits matched to invoices by hand; the statement of account rebuilt in Excel whenever it drifted.</p></div>
-      <div class="a"><span class="how">system</span><p>Every payment allocated to its invoice, every invoice to its PO. The statement of account comes straight from the ledger.</p></div>
-    </div></div>
-    <div class="step"><div class="n">STEP 8</div><h3>Last paid, next month</h3><div class="face">
-      <div class="b"><span class="how">manual</span><p>"Was this person paid for July?" answered from the old sheets. A renewal on a new PO needed a manual check.</p></div>
-      <div class="a"><span class="how">system</span><p>Last-paid date kept per contract and PO. A new contract shows NEW until its first payment; the old one keeps its history.</p></div>
-    </div></div>
+  <p class="lead rv d2">The account started on email and Excel. In 2026 we built Fisheye Ops around Sela's own situations: late POs, multiple batches, renewals mid-month. Same eight steps, side by side.</p>
+  <div class="cmp rv d3" id="cycle">
+    <div class="cmp-head">
+      <div></div>
+      <div class="cmp-hb"><span class="dot"></span>Manual · 2025</div>
+      <div></div>
+      <div class="cmp-ha"><span class="dot"></span>Fisheye Ops · now</div>
+    </div>
+    <div class="cmp-row">
+      <div class="cmp-step"><div class="n">STEP 1</div><h3>Who is on payroll this month</h3></div>
+      <div class="cmp-b"><span class="how">manual</span><p>A sheet typed by hand from contracts and email threads. Joiners and leavers remembered, not detected.</p></div>
+      <div class="cmp-arrow" aria-hidden="true">→</div>
+      <div class="cmp-a"><span class="how">Fisheye Ops</span><p>Built from the contract records: start, end, renewal, package. Every Sela contract appears automatically with its stage.</p></div>
+    </div>
+    <div class="cmp-row">
+      <div class="cmp-step"><div class="n">STEP 2</div><h3>Days, deductions, GOSI</h3></div>
+      <div class="cmp-b"><span class="how">manual</span><p>Proration worked out in Excel formulas per person; a mid-month start or exit meant a manual recalculation.</p></div>
+      <div class="cmp-arrow" aria-hidden="true">→</div>
+      <div class="cmp-a"><span class="how">Fisheye Ops</span><p>30-day proration, deductions and GOSI computed per row. The net amount and "x / 30 days" shown on each line.</p></div>
+    </div>
+    <div class="cmp-row">
+      <div class="cmp-step"><div class="n">STEP 3</div><h3>Match to the Sela PO</h3></div>
+      <div class="cmp-b"><span class="how">manual</span><p>PO numbers searched in mailboxes and matched by hand; a person moving to a new PO needed a manual note.</p></div>
+      <div class="cmp-arrow" aria-hidden="true">→</div>
+      <div class="cmp-a"><span class="how">Fisheye Ops</span><p>Each contract tied to its PO in the ledger. Missing PO, late PO and over-consumed PO are visible on the row.</p></div>
+    </div>
+    <div class="cmp-row">
+      <div class="cmp-step"><div class="n">STEP 4</div><h3>Approval from Sela</h3></div>
+      <div class="cmp-b"><span class="how">manual</span><p>PDF attached to an email, often held back by mail filters; approvals followed up by phone.</p></div>
+      <div class="cmp-arrow" aria-hidden="true">→</div>
+      <div class="cmp-a"><span class="how">Fisheye Ops</span><p>Sela managers approve on a secure link with phone verification. No attachments, nothing to block.</p></div>
+    </div>
+    <div class="cmp-row">
+      <div class="cmp-step"><div class="n">STEP 5</div><h3>Pay, in batches</h3></div>
+      <div class="cmp-b"><span class="how">manual</span><p>One cycle. A PO that landed after payday meant waiting for next month's run, and the owed days were tracked by hand.</p></div>
+      <div class="cmp-arrow" aria-hidden="true">→</div>
+      <div class="cmp-a"><span class="how">Fisheye Ops</span><p>Two to three batches a month. The moment a PO lands, the person is in the next batch with every owed day computed. Approved rows lock and leave the list.</p></div>
+    </div>
+    <div class="cmp-row">
+      <div class="cmp-step"><div class="n">STEP 6</div><h3>Invoice per PO</h3></div>
+      <div class="cmp-b"><span class="how">manual</span><p>Invoice typed in Zoho from the sheet; PO balance checked in a separate Excel.</p></div>
+      <div class="cmp-arrow" aria-hidden="true">→</div>
+      <div class="cmp-a"><span class="how">Fisheye Ops</span><p>One invoice per PO per month, against the ledger's remaining balance. Credit notes attached in place.</p></div>
+    </div>
+    <div class="cmp-row">
+      <div class="cmp-step"><div class="n">STEP 7</div><h3>Payments and SOA</h3></div>
+      <div class="cmp-b"><span class="how">manual</span><p>Bank credits matched to invoices by hand; the statement of account rebuilt in Excel whenever it drifted.</p></div>
+      <div class="cmp-arrow" aria-hidden="true">→</div>
+      <div class="cmp-a"><span class="how">Fisheye Ops</span><p>Every payment allocated to its invoice, every invoice to its PO. The statement of account comes straight from the ledger.</p></div>
+    </div>
+    <div class="cmp-row">
+      <div class="cmp-step"><div class="n">STEP 8</div><h3>Last paid, next month</h3></div>
+      <div class="cmp-b"><span class="how">manual</span><p>"Was this person paid for July?" answered from the old sheets. A renewal on a new PO needed a manual check.</p></div>
+      <div class="cmp-arrow" aria-hidden="true">→</div>
+      <div class="cmp-a"><span class="how">Fisheye Ops</span><p>Last-paid date kept per contract and PO. A new contract shows NEW until its first payment; the old one keeps its history.</p></div>
+    </div>
   </div>
   <div class="ba-sum rv">
     <div class="stat"><div class="num">Days → a review</div><div class="was">was: a payroll sheet built over days of Excel work</div><div class="now">now: generated from contracts, checked in a sitting</div></div>
@@ -545,30 +595,18 @@ footer{padding:40px 0 60px;color:var(--fg3);font-size:13px;font-family:var(--mon
     cs.forEach(function(el){ io3.observe(el); });
   } else { cs.forEach(run); }
 
-  // before / after switch + auto-stepping highlight
-  var ba = document.getElementById('automation'), sw = document.getElementById('baSwitch');
-  var bB = document.getElementById('btnBefore'), bA = document.getElementById('btnAfter');
-  var steps = Array.prototype.slice.call(document.querySelectorAll('#cycle .step'));
+  // before / after: auto-stepping row highlight
+  var ba = document.getElementById('automation');
+  var steps = Array.prototype.slice.call(document.querySelectorAll('#cycle .cmp-row'));
   var userTouched = false, idx = -1, timer = null;
-  function setMode(after){
-    ba.classList.toggle('after', after); sw.classList.toggle('after', after);
-    bB.setAttribute('aria-pressed', String(!after)); bA.setAttribute('aria-pressed', String(after));
-  }
-  bB.addEventListener('click', function(){ userTouched = true; setMode(false); });
-  bA.addEventListener('click', function(){ userTouched = true; setMode(true); });
   steps.forEach(function(s,i){ s.addEventListener('mouseenter', function(){ userTouched = true; light(i); }); });
   function light(i){ steps.forEach(function(s,j){ s.classList.toggle('lit', i===j); }); idx = i; }
-  function tick(){
-    if (userTouched) return;
-    var next = (idx + 1) % steps.length;
-    light(next);
-    if (next === steps.length - 1) setTimeout(function(){ if(!userTouched) setMode(!ba.classList.contains('after')); }, 1400);
-  }
+  function tick(){ if (userTouched) return; light((idx + 1) % steps.length); }
   if (io && !reduce) {
     var io4 = new IntersectionObserver(function(es){ es.forEach(function(e){
-      if (e.isIntersecting && !timer){ light(0); timer = setInterval(tick, 1800); }
+      if (e.isIntersecting && !timer){ light(0); timer = setInterval(tick, 2200); }
       else if (!e.isIntersecting && timer){ clearInterval(timer); timer = null; }
-    }); }, {threshold:.2});
+    }); }, {threshold:.15});
     io4.observe(ba);
   }
 })();
